@@ -23,7 +23,6 @@ nav.active{opacity:1;transform:translateY(0);}
 nav ul{display:flex;gap:30px;list-style:none;}
 nav a{text-decoration:none;color:white;opacity:.7;font-size:clamp(.9rem,1.2vw,1rem);transition:.3s;}
 nav a:hover{opacity:1;}
-
 .logo-icon{height:45px;width:45px;border-radius:50%;object-fit:cover;}
 
 /* HEADER */
@@ -42,17 +41,16 @@ header h1.active, header h2.active, header p.active, .hire-btn.active, .scroll-d
 opacity:1; transform:translateY(0);
 }
 
-/* Hire Button */
 .hire-btn{
 margin-top:25px;padding:14px 30px;border-radius:50px;font-weight:600;font-size:1rem;
-color:#fff;background:linear-gradient(45deg,#ff0077,#6f00ff);border:none;cursor:pointer;
-transition:.3s;text-decoration:none;display:inline-block;
+color:#fff;background:linear-gradient(45deg,#ff0077,#6f00ff);
+border:none;cursor:pointer;transition:.3s;text-decoration:none;
 }
 .hire-btn:hover{transform:scale(1.07);box-shadow:0 0 18px rgba(255,0,200,0.5);}
 
 /* Shapes */
 .shape{position:absolute;width:150px;height:150px;border-radius:50%;
-background:linear-gradient(45deg,#ff0077,#6f00ff);filter:blur(25px);opacity:.2;transition:transform .2s;}
+background:linear-gradient(45deg,#ff0077,#6f00ff);filter:blur(25px);opacity:.2;}
 .one{top:15%;left:10%;}
 .two{top:60%;right:5%;}
 .three{bottom:10%;left:40%;}
@@ -75,27 +73,31 @@ box-shadow:0 0 45px rgba(255,0,200,0.07);
 .reveal{opacity:0;transform:translateY(50px);transition:all .7s ease;}
 .reveal.active{opacity:1;transform:translateY(0);}
 
-/* Videos (bigger) */
+/* Videos */
 .video-container{
 width:100%;
 height:70vh;
 border-radius:20px;
 overflow:hidden;
 position:relative;
-transition:transform .4s,box-shadow .4s;
 cursor:pointer;
+transition:transform .4s,box-shadow .4s;
 }
 .video-container:hover{transform:scale(1.02);box-shadow:0 0 25px rgba(255,0,200,0.4);}
-video, iframe{width:100%;height:100%;object-fit:cover;border:none;}
 
-/* Horizontal Scroll */
+video{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* Horizontal scroll */
 .horizontal-wrapper{position:relative;}
 .horizontal-scroll{
 display:flex;
 gap:25px;
 overflow-x:auto;
 scroll-behavior:smooth;
-padding-bottom:20px;
 scrollbar-width:none;
 }
 .horizontal-scroll::-webkit-scrollbar{display:none;}
@@ -112,25 +114,17 @@ position:absolute;
 top:50%;
 transform:translateY(-50%);
 font-size:4rem;
-font-weight:300;
 background:none;
 border:none;
 color:white;
 cursor:pointer;
-z-index:10;
 opacity:0.6;
-transition:0.3s;
 }
 .scroll-arrow:hover{opacity:1;}
 .scroll-left{left:-10px;}
 .scroll-right{right:-10px;}
 
 .scroll-hint{text-align:center;opacity:.6;margin-bottom:15px;}
-
-/* Contact */
-.socials{margin-top:25px;display:flex;justify-content:center;gap:25px;}
-.socials a svg{width:28px;height:28px;fill:white;opacity:.75;transition:.3s;}
-.socials a svg:hover{opacity:1;}
 
 footer{text-align:center;padding:40px;opacity:.5;font-size:.9rem;}
 
@@ -191,7 +185,7 @@ display:none;z-index:9999;
 
 <br><br>
 
-
+<!-- Gaming Videos -->
 <div class="work-box reveal">
 <h2 class="section-title reveal">Gaming Videos</h2>
 <p class="scroll-hint">&lt; Scroll sideways &gt;</p>
@@ -203,12 +197,12 @@ display:none;z-index:9999;
 <div class="video-container"><video src="video6.mp4" autoplay muted loop playsinline></video></div>
 <div class="video-container"><video src="video7.mp4" autoplay muted loop playsinline></video></div>
 <div class="video-container"><video src="video8.mp4" autoplay muted loop playsinline></video></div>
-
 </div>
 
 <button class="scroll-arrow scroll-right">&gt;</button>
 </div>
 </div>
+
 </section>
 
 <section id="contact" class="reveal">
@@ -243,7 +237,7 @@ s.style.transform=`translate(${x*(30+i*10)}px,${y*(30+i*10)}px)`;
 });
 });
 
-/* Smooth scroll */
+/* Smooth nav scroll */
 document.querySelectorAll("nav a").forEach(a=>{
 a.onclick=e=>{
 e.preventDefault();
@@ -251,12 +245,18 @@ document.querySelector(a.getAttribute("href")).scrollIntoView({behavior:"smooth"
 };
 });
 
-/* Fullscreen videos */
+/* FULLSCREEN FIX */
 const exitBtn=document.getElementById("exitFullscreenBtn");
+
 document.querySelectorAll("video").forEach(video=>{
 video.addEventListener("click",()=>{
 video.muted=false;
 video.controls=true;
+
+/* preserve aspect ratio */
+video.style.objectFit="contain";
+video.style.background="black";
+
 if(video.requestFullscreen) video.requestFullscreen();
 exitBtn.style.display="block";
 });
@@ -270,11 +270,13 @@ exitBtn.style.display="none";
 document.querySelectorAll("video").forEach(v=>{
 v.muted=true;
 v.controls=false;
+v.style.objectFit="cover";
+v.style.background="transparent";
 });
 }
 });
 
-/* Horizontal scroll logic */
+/* Horizontal scroll arrows */
 document.querySelectorAll(".horizontal-wrapper").forEach(wrapper=>{
 const scroll = wrapper.querySelector(".horizontal-scroll");
 const left = wrapper.querySelector(".scroll-left");
